@@ -19,6 +19,12 @@ module.exports = function QuickLoad(dispatch) {
 	dispatch.hook('S_LOAD_TOPO', 3, {order: 100}, event => {
 		quick = event.quick;
 		loc = new Vec3(event.loc);
+		console.log('[quick-load] event.zone: ' + event.zone);
+		console.log('[quick-load] zone: ' + zone);
+		console.log('[quick-load] config.loadExtra: ' + config.loadExtra);
+		console.log('[quick-load] loc.dist3D: ' + loc.dist3D(lastLocation));
+		console.log('[quick-load] config.loadDistance: ' + config.loadDistance);
+		console.log('[quick-load] config.blockedZones: ' + config.blockedZones);
 
 		if(event.zone === zone && (config.loadExtra || loc.dist3D(lastLocation) <= config.loadDistance) && event.zone !== config.blockedZones) {
 		        return modified = event.quick = true;
