@@ -65,7 +65,7 @@ module.exports = function QuickLoad(dispatch) {
 					gameId: myGameId,
 					loc: new Vec3(correctLocation),
 					w: correctAngle
-				}
+				});
 				correctLocation = null
 				return false
 			}
