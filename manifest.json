@@ -1,7 +1,18 @@
 {
   "files": {
     "config.json": {"overwrite": false, "hash": "55db11c66ab593710ec41a3452b9de432322d021981df130b724565df9c809e9"},
-    "index.js": "a78272d70151d1fcfdf710eeb12e28b3dfa8df083e01365ffde59ece916173a1",
+    "index.js": "14dee7089ca1a1d0a23ead31d039da0e1f747834ff81133e0acf63ee49ecbc40",
     "module.json": "8f5704c4fc46266615e54a96b9d4767ea5062c95c7ca6c8e9acdf73ec9e475cd"
+  },
+  "defs": {
+  	"S_LOGIN": "raw",
+  	"S_LOAD_TOPO": 3,
+  	"S_SPAWN_ME": 3,
+  	"S_ADMIN_HOLD_CHARACTER": ["raw",2],
+  	"C_PLAYER_LOCATION": 5,
+  	"S_INSTANT_MOVE": 3,
+  	"C_VIST_NEW_SECTION": "raw",
+  	"S_PLAY_MOVIE": 1,
+  	"C_END_MOVIE": 1
   }
 }

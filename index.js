@@ -6,7 +6,7 @@ module.exports = function QuickLoad(dispatch) {
 	let zone = -1,
 		quick = false,
 		modified = false,
-		lastLocation = new Vec3(null);
+		lastLocation = new Vec3(null),
 		correctLocation = null,
 		myGameId = null,
 		correctAngle = null
@@ -20,12 +20,15 @@ module.exports = function QuickLoad(dispatch) {
 		quick = event.quick;
 		loc = new Vec3(event.loc);
 
-		if(event.zone === zone && (config.loadExtra || loc.dist3D(lastLocation) <= config.loadDistance) && event.zone !== config.blockedZones)
-        return modified = event.quick = true
+		if(event.zone === zone && (config.loadExtra || loc.dist3D(lastLocation) <= config.loadDistance) && event.zone !== config.blockedZones) {
+		        return modified = event.quick = true;
+		        console.log('[quick-load] bypassing loading screen.');
+		    };
 
 		zone = event.zone
 		modified = false
-	})
+		console.log('[quick-load] Ready for next loading screen.');
+	});
 
 	dispatch.hook('S_SPAWN_ME', 3, {order: 100}, event => {
 		loc = new Vec3(event.loc);
@@ -36,8 +39,10 @@ module.exports = function QuickLoad(dispatch) {
 		}
 
 		if(modified) {
-			if(!lastLocation || loc.dist3D(lastLocation) > config.loadDistance)
+			if(!lastLocation || loc.dist3D(lastLocation) > config.loadDistance) {
 				process.nextTick(() => { dispatch.toClient('S_ADMIN_HOLD_CHARACTER', 2, {hold: true}) })
+				console.log('[quick-load] Distance is too far or player location is not set.');
+			}
 			else modified = false
 
 			dispatch.toClient('S_SPAWN_ME', 3, event) // Bring our character model back from the void
@@ -50,7 +55,8 @@ module.exports = function QuickLoad(dispatch) {
 				jumpDistance: 0,
 				inShuttle: 0,
 				time: 0
-			})
+			});
+			console.log('[quick-load] Updating server position.')
 		}
 	})
 
@@ -66,6 +72,7 @@ module.exports = function QuickLoad(dispatch) {
 					loc: new Vec3(correctLocation),
 					w: correctAngle
 				});
+				console.log('[quick-load] Fixing player location. Current loc: ' + loc.z.toString() + '. Correct loc: ' + correctLocation.z.toString() + '.');
 				correctLocation = null
 				return false
 			}
