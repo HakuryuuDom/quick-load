@@ -3,7 +3,7 @@ const Vec3 = require('tera-vec3');
 
 module.exports = function QuickLoad(dispatch) {
 	const config = require('./config.json');
-	let zone = -1,
+	let lastZone = -1,
 		quick = false,
 		modified = false,
 		lastLocation = new Vec3(null),
@@ -12,7 +12,7 @@ module.exports = function QuickLoad(dispatch) {
 		correctAngle = null
 
 	dispatch.hook('S_LOGIN', 'raw', () => {
-		zone = -1
+		lastZone = -1
 		lastLocation = null
 	})
 
@@ -20,19 +20,19 @@ module.exports = function QuickLoad(dispatch) {
 		quick = event.quick;
 		loc = new Vec3(event.loc);
 		console.log('[quick-load] event.zone: ' + event.zone);
-		console.log('[quick-load] zone: ' + zone);
+		console.log('[quick-load] lastZone: ' + lastZone);
 		console.log('[quick-load] config.loadExtra: ' + config.loadExtra);
 		console.log('[quick-load] loc.dist3D: ' + loc.dist3D(lastLocation));
 		console.log('[quick-load] config.loadDistance: ' + config.loadDistance);
 		console.log('[quick-load] config.blockedZones: ' + config.blockedZones);
 
-		if(event.zone === zone && (config.loadExtra || loc.dist3D(lastLocation) <= config.loadDistance) && event.zone !== config.blockedZones) {
+		if(event.zone === lastZone && (config.loadExtra || loc.dist3D(lastLocation) <= config.loadDistance) && event.zone !== config.blockedZones) {
 		        console.log('[quick-load] bypassing loading screen.');
 		        return modified = event.quick = true;
 		        
 		    };
 
-		zone = event.zone
+		lastZone = event.zone
 		modified = false
 		console.log('[quick-load] Ready for next loading screen.');
 	});
@@ -101,7 +101,7 @@ module.exports = function QuickLoad(dispatch) {
 		}
 	})
 	dispatch.hook('S_PLAY_MOVIE', 1, {order: 100}, event => {
-		if(zone === config.skipCutscenesZones && config.skipCutscenes) {
+		if(lastZone === config.skipCutscenesZones && config.skipCutscenes) {
 			
 			dispatch.toServer('C_END_MOVIE', Object.assign({ unk: true }, event));
 			return false;
