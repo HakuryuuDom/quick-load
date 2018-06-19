@@ -27,8 +27,9 @@ module.exports = function QuickLoad(dispatch) {
 		console.log('[quick-load] config.blockedZones: ' + config.blockedZones);
 
 		if(event.zone === zone && (config.loadExtra || loc.dist3D(lastLocation) <= config.loadDistance) && event.zone !== config.blockedZones) {
-		        return modified = event.quick = true;
 		        console.log('[quick-load] bypassing loading screen.');
+		        return modified = event.quick = true;
+		        
 		    };
 
 		zone = event.zone
