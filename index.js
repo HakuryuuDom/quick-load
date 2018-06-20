@@ -19,22 +19,14 @@ module.exports = function QuickLoad(dispatch) {
 	dispatch.hook('S_LOAD_TOPO', 3, {order: 100}, event => {
 		quick = event.quick;
 		loc = new Vec3(event.loc);
-		console.log('[quick-load] event.zone: ' + event.zone);
-		console.log('[quick-load] lastZone: ' + lastZone);
-		console.log('[quick-load] config.loadExtra: ' + config.loadExtra);
-		console.log('[quick-load] loc.dist3D: ' + loc.dist3D(lastLocation));
-		console.log('[quick-load] config.loadDistance: ' + config.loadDistance);
-		console.log('[quick-load] config.blockedZones: ' + config.blockedZones);
 
 		if(event.zone === lastZone && (config.loadExtra || loc.dist3D(lastLocation) <= config.loadDistance) && event.zone !== config.blockedZones) {
-		        console.log('[quick-load] bypassing loading screen.');
 		        return modified = event.quick = true;
 		        
 		    };
 
 		lastZone = event.zone
 		modified = false
-		console.log('[quick-load] Ready for next loading screen.');
 	});
 
 	dispatch.hook('S_SPAWN_ME', 3, {order: 100}, event => {
@@ -48,7 +40,6 @@ module.exports = function QuickLoad(dispatch) {
 		if(modified) {
 			if(!lastLocation || loc.dist3D(lastLocation) > config.loadDistance) {
 				process.nextTick(() => { dispatch.toClient('S_ADMIN_HOLD_CHARACTER', 2, {hold: true}) })
-				console.log('[quick-load] Distance is too far or player location is not set.');
 			}
 			else modified = false
 
@@ -63,7 +54,6 @@ module.exports = function QuickLoad(dispatch) {
 				inShuttle: 0,
 				time: 0
 			});
-			console.log('[quick-load] Updating server position.')
 		}
 	})
 
@@ -79,7 +69,6 @@ module.exports = function QuickLoad(dispatch) {
 					loc: new Vec3(correctLocation),
 					w: correctAngle
 				});
-				console.log('[quick-load] Fixing player location. Current loc: ' + loc.z.toString() + '. Correct loc: ' + correctLocation.z.toString() + '.');
 				correctLocation = null
 				return false
 			}
