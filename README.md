@@ -1,5 +1,3 @@
-# Broken atm :(
-
 # quick-load
 tera-proxy module to bypass loading screens
 
@@ -14,6 +12,9 @@ blockedZones: Some zones behave weirdly if the loading screen is skipped, add it
 skipCutscenes: Set to true if you wish to skip problematic cutscenes
 
 skipCutscenesZones: List of zones that should have their cutscenes skipped. (ie RKNM, RKHM)
+
+# Known Issues
+Does not work in Northern Shara zones. thanks BHS
 
 # Credits
 Original mod by PinkiPi

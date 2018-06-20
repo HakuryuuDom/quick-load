@@ -20,7 +20,7 @@ module.exports = function QuickLoad(dispatch) {
 		quick = event.quick;
 		loc = new Vec3(event.loc);
 
-		if(event.zone === lastZone && (config.loadExtra || loc.dist3D(lastLocation) <= config.loadDistance) && event.zone !== config.blockedZones) {
+		if(event.zone === lastZone && (config.loadExtra || loc.dist3D(lastLocation) <= config.loadDistance) && !config.blockedZones.includes(event.zone)) {
 		        return modified = event.quick = true;
 		        
 		    };
