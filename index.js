@@ -1,7 +1,9 @@
 // <3 Pinkie Pie :3 - fork by Haku, Includes skip-cutscenes for problematic zones
 const Vec3 = require('tera-vec3');
+const Command = require('command');
 
 module.exports = function QuickLoad(dispatch) {
+	const command = Command(dispatch);
 	const config = require('./config.json');
 	let lastZone = -1,
 		quick = false,
@@ -9,7 +11,18 @@ module.exports = function QuickLoad(dispatch) {
 		lastLocation = new Vec3(null),
 		correctLocation = null,
 		myGameId = null,
-		correctAngle = null;
+		correctAngle = null,
+		enabled = true;
+
+	command.add(['ql','quickload'], () => {
+		if(enabled) {
+			enabled = false;
+			command.message('[quick-load] Module disabled.');
+		} else if(!enabled) {
+			enabled = true;
+			command.message('[quick-load] Module enabled.');
+		};
+	});
 
 	dispatch.hook('S_LOGIN', 'raw', () => {
 		lastZone = -1;
@@ -20,7 +33,7 @@ module.exports = function QuickLoad(dispatch) {
 		quick = event.quick;
 		loc = new Vec3(event.loc);
 
-		if(event.zone === lastZone && (config.loadExtra || loc.dist3D(lastLocation) <= config.loadDistance) && !config.blockedZones.includes(event.zone)) {
+		if(enabled && event.zone === lastZone && (config.loadExtra || loc.dist3D(lastLocation) <= config.loadDistance) && !config.blockedZones.includes(event.zone)) {
 		        return modified = event.quick = true;
 		        
 		    };
@@ -90,10 +103,11 @@ module.exports = function QuickLoad(dispatch) {
 		}
 	})
 	dispatch.hook('S_PLAY_MOVIE', 1, {order: 100}, event => {
-		if(config.skipCutscenesZones.includes(lastZone) && config.skipCutscenes) {
+		if(config.skipCutscenesZones.includes(lastZone) && config.skipCutscenes && enabled) {
 			
 			dispatch.toServer('C_END_MOVIE', Object.assign({ unk: true }, event));
 			return false;
 		};
 	});
+	this.destructor = () => {command.remove(['ql','quickload'])}
 };

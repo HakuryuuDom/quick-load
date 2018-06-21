@@ -1,6 +1,9 @@
 # quick-load
 tera-proxy module to bypass loading screens when teleporting into nearby areas
 
+# Command
+ql, quickload: turns the module on or off.
+
 # config
 loadDistance: The maximum distance at which same-zone loading screens will be ignored.
 
