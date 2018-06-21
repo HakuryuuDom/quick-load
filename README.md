@@ -1,10 +1,11 @@
 # quick-load
-tera-proxy module to bypass loading screens
+tera-proxy module to bypass loading screens when teleporting into nearby areas
 
 # config
 loadDistance: The maximum distance at which same-zone loading screens will be ignored.
 
-loadExtra: Attempt to quick-load same zones beyond loadDistance.
+loadExtra: Disable this if you experience too many bugs. This will remove loading screens only when switching channels or teleporting extremely short distances.
+
 loadExtraMs: Increase this if you experience falling due to collision maps taking too long to load.
 
 blockedZones: Some zones behave weirdly if the loading screen is skipped, add it here to disable the mod for that zone. (ie Harrowhold)
