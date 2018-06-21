@@ -52,7 +52,7 @@ module.exports = function QuickLoad(dispatch) {
 				type: 7,
 				jumpDistance: 0,
 				inShuttle: 0,
-				time: 0;
+				time: 0
 			});
 		};
 	});
@@ -67,7 +67,7 @@ module.exports = function QuickLoad(dispatch) {
 				dispatch.toClient('S_INSTANT_MOVE', 3, {
 					gameId: myGameId,
 					loc: new Vec3(correctLocation),
-					w: correctAngle;
+					w: correctAngle
 				});
 				correctLocation = null;
 				return false;
