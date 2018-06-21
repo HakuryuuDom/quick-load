@@ -5,7 +5,7 @@
 	"blockedZones": [
 		9950
 	],
-	"skipCutscenes": true,
+	"skipCutscenes": false,
 	"skipCutscenesZones": [
 		9735,
 		9935

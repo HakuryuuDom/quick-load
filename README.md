@@ -10,7 +10,7 @@ loadExtraMs: Increase this if you experience falling due to collision maps takin
 
 blockedZones: Some zones behave weirdly if the loading screen is skipped, add it here to disable the mod for that zone. (ie Harrowhold)
 
-skipCutscenes: Set to true if you wish to skip problematic cutscenes
+skipCutscenes: Set to true if you wish to skip problematic cutscenes. Disabled by default.
 
 skipCutscenesZones: List of zones that should have their cutscenes skipped. (ie RKNM, RKHM)
 
