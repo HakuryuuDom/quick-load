@@ -47,7 +47,7 @@ module.exports = function QuickLoad(dispatch) {
 			dispatch.toServer('C_PLAYER_LOCATION', 5, { // Update our position on the server
 				loc: new Vec3(loc),
 				w: event.w,
-				unk2: 0,
+				lookDirection: 0,
 				dest: new Vec3(loc),
 				type: 7,
 				jumpDistance: 0,
