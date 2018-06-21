@@ -9,11 +9,11 @@ module.exports = function QuickLoad(dispatch) {
 		lastLocation = new Vec3(null),
 		correctLocation = null,
 		myGameId = null,
-		correctAngle = null
+		correctAngle = null;
 
 	dispatch.hook('S_LOGIN', 'raw', () => {
-		lastZone = -1
-		lastLocation = null
+		lastZone = -1;
+		lastLocation = null;
 	})
 
 	dispatch.hook('S_LOAD_TOPO', 3, {order: 100}, event => {
@@ -25,23 +25,23 @@ module.exports = function QuickLoad(dispatch) {
 		        
 		    };
 
-		lastZone = event.zone
-		modified = false
+		lastZone = event.zone;
+		modified = false;
 	});
 
 	dispatch.hook('S_SPAWN_ME', 3, {order: 100}, event => {
 		loc = new Vec3(event.loc);
+		myGameId = event.gameId;
 		if(!quick) {
 			correctLocation = new Vec3(event.loc);
-			correctAngle = event.w
-			myGameId = event.gameId
-		}
+			correctAngle = event.w;
+		};
 
 		if(modified) {
 			if(!lastLocation || loc.dist3D(lastLocation) > config.loadDistance) {
 				process.nextTick(() => { dispatch.toClient('S_ADMIN_HOLD_CHARACTER', 2, {hold: true}) })
 			}
-			else modified = false
+			else modified = false;
 
 			dispatch.toClient('S_SPAWN_ME', 3, event) // Bring our character model back from the void
 			dispatch.toServer('C_PLAYER_LOCATION', 5, { // Update our position on the server
@@ -52,41 +52,41 @@ module.exports = function QuickLoad(dispatch) {
 				type: 7,
 				jumpDistance: 0,
 				inShuttle: 0,
-				time: 0
+				time: 0;
 			});
-		}
-	})
+		};
+	});
 
-	dispatch.hook('S_ADMIN_HOLD_CHARACTER', 'raw', () => !modified && undefined)
+	dispatch.hook('S_ADMIN_HOLD_CHARACTER', 'raw', () => !modified && undefined);
 
 	dispatch.hook('C_PLAYER_LOCATION', 5, event => {
-		loc = new Vec3(event.loc)
+		loc = new Vec3(event.loc);
 		if(correctLocation) {
 			// Did we accidentally spawn under the map? Let's fix that!
 			if(loc.z !== correctLocation.z) {
 				dispatch.toClient('S_INSTANT_MOVE', 3, {
 					gameId: myGameId,
 					loc: new Vec3(correctLocation),
-					w: correctAngle
+					w: correctAngle;
 				});
-				correctLocation = null
-				return false
-			}
-			correctLocation = null
-		}
-	})
+				correctLocation = null;
+				return false;
+			};
+			correctLocation = null;
+		};
+	});
 
 	dispatch.hook('C_PLAYER_LOCATION', 5, {order: 100, filter: {fake: null}}, event => {
 		lastLocation = new Vec3(event.loc);
-	})
+	});
 
 	dispatch.hook('C_VISIT_NEW_SECTION', 'raw', () => {
 		// If our client doesn't send C_PLAYER_LOCATION before this packet, then it's most likely user input
-		correctLocation = null
+		correctLocation = null;
 
 		if(modified) {
-			setTimeout(() => { dispatch.toClient('S_ADMIN_HOLD_CHARACTER', 2, {hold: false}) }, config.loadExtraMs)
-			modified = false
+			setTimeout(() => { dispatch.toClient('S_ADMIN_HOLD_CHARACTER', 2, {hold: false}) }, config.loadExtraMs);
+			modified = false;
 		}
 	})
 	dispatch.hook('S_PLAY_MOVIE', 1, {order: 100}, event => {
@@ -94,6 +94,6 @@ module.exports = function QuickLoad(dispatch) {
 			
 			dispatch.toServer('C_END_MOVIE', Object.assign({ unk: true }, event));
 			return false;
-		}
+		};
 	});
-}
+};
