@@ -1,5 +1,4 @@
 // <3 Pinkie Pie :3 - fork by Haku, Includes skip-cutscenes for problematic zones
-const Vec3 = require('tera-vec3');
 const Command = require('command');
 
 module.exports = function QuickLoad(dispatch) {
@@ -8,7 +7,7 @@ module.exports = function QuickLoad(dispatch) {
 	let lastZone = -1,
 		quick = false,
 		modified = false,
-		lastLocation = new Vec3(null),
+		lastLocation = null,
 		correctLocation = null,
 		myGameId = null,
 		correctAngle = null,
@@ -31,11 +30,8 @@ module.exports = function QuickLoad(dispatch) {
 
 	dispatch.hook('S_LOAD_TOPO', 3, {order: 100}, event => {
 		quick = event.quick;
-		loc = new Vec3(event.loc);
-
-		if(enabled && event.zone === lastZone && (config.loadExtra || loc.dist3D(lastLocation) <= config.loadDistance) && !config.blockedZones.includes(event.zone)) {
-		        return modified = event.quick = true;
-		        
+		if(enabled && event.zone === lastZone && (config.loadExtra || event.loc.dist3D(lastLocation) <= config.loadDistance) && !config.blockedZones.includes(event.zone)) {
+			return modified = event.quick = true; 
 		    };
 
 		lastZone = event.zone;
@@ -43,25 +39,24 @@ module.exports = function QuickLoad(dispatch) {
 	});
 
 	dispatch.hook('S_SPAWN_ME', 3, {order: 100}, event => {
-		loc = new Vec3(event.loc);
 		myGameId = event.gameId;
 		if(!quick) {
-			correctLocation = new Vec3(event.loc);
+			correctLocation = event.loc;
 			correctAngle = event.w;
 		};
 
 		if(modified) {
-			if(!lastLocation || loc.dist3D(lastLocation) > config.loadDistance) {
+			if(!lastLocation || event.loc.dist3D(lastLocation) > config.loadDistance) {
 				process.nextTick(() => { dispatch.toClient('S_ADMIN_HOLD_CHARACTER', 2, {hold: true}) })
 			}
 			else modified = false;
 
 			dispatch.toClient('S_SPAWN_ME', 3, event) // Bring our character model back from the void
 			dispatch.toServer('C_PLAYER_LOCATION', 5, { // Update our position on the server
-				loc: new Vec3(loc),
+				loc: event.loc,
 				w: event.w,
 				lookDirection: 0,
-				dest: new Vec3(loc),
+				dest: event.loc,
 				type: 7,
 				jumpDistance: 0,
 				inShuttle: 0,
@@ -73,13 +68,12 @@ module.exports = function QuickLoad(dispatch) {
 	dispatch.hook('S_ADMIN_HOLD_CHARACTER', 'raw', () => !modified && undefined);
 
 	dispatch.hook('C_PLAYER_LOCATION', 5, event => {
-		loc = new Vec3(event.loc);
 		if(correctLocation) {
 			// Did we accidentally spawn under the map? Let's fix that!
-			if(loc.z !== correctLocation.z) {
+			if(event.loc.z !== correctLocation.z) {
 				dispatch.toClient('S_INSTANT_MOVE', 3, {
 					gameId: myGameId,
-					loc: new Vec3(correctLocation),
+					loc: correctLocation,
 					w: correctAngle
 				});
 				correctLocation = null;
@@ -90,7 +84,7 @@ module.exports = function QuickLoad(dispatch) {
 	});
 
 	dispatch.hook('C_PLAYER_LOCATION', 5, {order: 100, filter: {fake: null}}, event => {
-		lastLocation = new Vec3(event.loc);
+		lastLocation = event.loc;
 	});
 
 	dispatch.hook('C_VISIT_NEW_SECTION', 'raw', () => {
