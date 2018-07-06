@@ -99,7 +99,7 @@ module.exports = function QuickLoad(dispatch) {
 	dispatch.hook('S_PLAY_MOVIE', 1, {order: 100}, event => {
 		if(config.skipCutscenesZones.includes(lastZone) && config.skipCutscenes && enabled) {
 			
-			dispatch.toServer('C_END_MOVIE', Object.assign({ unk: true }, event));
+			dispatch.toServer('C_END_MOVIE', 1, Object.assign({ unk: true }, event));
 			return false;
 		};
 	});
