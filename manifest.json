@@ -2,7 +2,7 @@
   "files": {
     "index.js": "0b36f461d5002d4509a3d1b33c0d26a1a4b67e7798ae89e2980a5326a08a6a58",
     "module.json": "d1b81902a376c79335cd4c35bb53c9b208a85176c3973af9477551f1163d4624",
-    "setting_migration.js": "e7d8b105415b7fecc2f3cc2c3d1f6ba71abdcfa43ffc2db7dc0650da0a524dd2"
+    "setting_migration.js": "aef3afc4d405564b4d5fb54456466970373e77c34defd671527441b7186a2af6"
   },
   "defs": {
   	"S_LOAD_TOPO": 3,

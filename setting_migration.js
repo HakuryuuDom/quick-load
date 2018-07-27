@@ -15,7 +15,7 @@ let DefaultSettings = {
 	]
 }
 
-function MigrateSetting(from_ver, to_ver, settings) {
+module.exports = function MigrateSetting(from_ver, to_ver, settings) {
 	if(from_ver === undefined) {
 		settings.enabled = true;
 		return Object.assign(Object.assign({}, DefaultSettings), settings);
