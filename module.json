@@ -2,7 +2,7 @@
 	"disableAutoupdate": false,
 	"options": {
 		"niceName": "QuickLoad",
-		"settingsVersion": 1,
+		"settingsVersion": 2,
 		"settingsFile": "config.json",
 		"settingsMigrator": "setting_migration.js"
 	},

@@ -1,8 +1,8 @@
 {
   "files": {
     "index.js": "0b36f461d5002d4509a3d1b33c0d26a1a4b67e7798ae89e2980a5326a08a6a58",
-    "module.json": "d1b81902a376c79335cd4c35bb53c9b208a85176c3973af9477551f1163d4624",
-    "setting_migration.js": "aef3afc4d405564b4d5fb54456466970373e77c34defd671527441b7186a2af6"
+    "module.json": "a81e0e37060810a71adf5bd5749fe1297e706d2062caf10b01e5cf271d400273",
+    "setting_migration.js": "d50b87919092ff50d8481ce0248e5d136c0efe00c0ecc17170c45689a22ffbcd"
   },
   "defs": {
   	"S_LOAD_TOPO": 3,
