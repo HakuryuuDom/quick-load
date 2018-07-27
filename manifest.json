@@ -1,11 +1,10 @@
 {
   "files": {
-    "config.json": {"overwrite": false, "hash": "7fd8e314380594a7f8a26aa1ad3265469ae1fe32f68f1d52362f03d6fbc282e0"},
-    "index.js": "ad89841157281d7e64f41f42b56762a801f60574ec33e68b4f6b3c0984015d29",
-    "module.json": "8f5704c4fc46266615e54a96b9d4767ea5062c95c7ca6c8e9acdf73ec9e475cd"
+    "index.js": "0b36f461d5002d4509a3d1b33c0d26a1a4b67e7798ae89e2980a5326a08a6a58",
+    "module.json": "d1b81902a376c79335cd4c35bb53c9b208a85176c3973af9477551f1163d4624",
+    "setting_migration.js": "e7d8b105415b7fecc2f3cc2c3d1f6ba71abdcfa43ffc2db7dc0650da0a524dd2"
   },
   "defs": {
-  	"S_LOGIN": "raw",
   	"S_LOAD_TOPO": 3,
   	"S_SPAWN_ME": 3,
   	"S_ADMIN_HOLD_CHARACTER": ["raw",2],

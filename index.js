@@ -1,36 +1,26 @@
 // <3 Pinkie Pie :3 - fork by Haku, Includes skip-cutscenes for problematic zones
-const Command = require('command');
-
-module.exports = function QuickLoad(dispatch) {
-	const command = Command(dispatch);
-	const config = require('./config.json');
+module.exports = function QuickLoad(mod) {
 	let lastZone = -1,
 		quick = false,
 		modified = false,
 		lastLocation = null,
 		correctLocation = null,
-		myGameId = null,
-		correctAngle = null,
-		enabled = true;
+		correctAngle = null;
 
-	command.add(['ql','quickload'], () => {
-		if(enabled) {
-			enabled = false;
-			command.message('[quick-load] Module disabled.');
-		} else if(!enabled) {
-			enabled = true;
-			command.message('[quick-load] Module enabled.');
-		};
+	mod.command.add(['ql','quickload'], () => {
+
+		mod.settings.enabled = !mod.settings.enabled;
+		mod.command.message('Module ' + mod.settings.enabled ? 'en' : 'dis' + 'abled')
 	});
 
-	dispatch.hook('S_LOGIN', 'raw', () => {
+	mod.game.on('enter_game', () => {
 		lastZone = -1;
 		lastLocation = null;
 	})
 
-	dispatch.hook('S_LOAD_TOPO', 3, {order: 100}, event => {
+	mod.hook('S_LOAD_TOPO', 3, {order: 100}, event => {
 		quick = event.quick;
-		if(enabled && event.zone === lastZone && (config.loadExtra || event.loc.dist3D(lastLocation) <= config.loadDistance) && !config.blockedZones.includes(event.zone)) {
+		if(enabled && event.zone === lastZone && (mod.settings.loadExtra || event.loc.dist3D(lastLocation) <= mod.settings.loadDistance) && !mod.settings.blockedZones.includes(event.zone)) {
 			return modified = event.quick = true; 
 		    };
 
@@ -38,21 +28,20 @@ module.exports = function QuickLoad(dispatch) {
 		modified = false;
 	});
 
-	dispatch.hook('S_SPAWN_ME', 3, {order: 100}, event => {
-		myGameId = event.gameId;
+	mod.hook('S_SPAWN_ME', 3, {order: 100}, event => {
 		if(!quick) {
 			correctLocation = event.loc;
 			correctAngle = event.w;
 		};
 
 		if(modified) {
-			if(!lastLocation || event.loc.dist3D(lastLocation) > config.loadDistance) {
-				process.nextTick(() => { dispatch.toClient('S_ADMIN_HOLD_CHARACTER', 2, {hold: true}) })
+			if(!lastLocation || event.loc.dist3D(lastLocation) > mod.settings.loadDistance) {
+				process.nextTick(() => { mod.send('S_ADMIN_HOLD_CHARACTER', 2, {hold: true}) })
 			}
 			else modified = false;
 
-			dispatch.toClient('S_SPAWN_ME', 3, event) // Bring our character model back from the void
-			dispatch.toServer('C_PLAYER_LOCATION', 5, { // Update our position on the server
+			mod.send('S_SPAWN_ME', 3, event) // Bring our character model back from the void
+			mod.send('C_PLAYER_LOCATION', 5, { // Update our position on the server
 				loc: event.loc,
 				w: event.w,
 				lookDirection: 0,
@@ -65,14 +54,14 @@ module.exports = function QuickLoad(dispatch) {
 		};
 	});
 
-	dispatch.hook('S_ADMIN_HOLD_CHARACTER', 'raw', () => !modified && undefined);
+	mod.hook('S_ADMIN_HOLD_CHARACTER', 'raw', () => !modified && undefined);
 
-	dispatch.hook('C_PLAYER_LOCATION', 5, event => {
+	mod.hook('C_PLAYER_LOCATION', 5, event => {
 		if(correctLocation) {
 			// Did we accidentally spawn under the map? Let's fix that!
 			if(event.loc.z !== correctLocation.z) {
-				dispatch.toClient('S_INSTANT_MOVE', 3, {
-					gameId: myGameId,
+				mod.send('S_INSTANT_MOVE', 3, {
+					gameId: mod.game.me.gameId,
 					loc: correctLocation,
 					w: correctAngle
 				});
@@ -83,25 +72,25 @@ module.exports = function QuickLoad(dispatch) {
 		};
 	});
 
-	dispatch.hook('C_PLAYER_LOCATION', 5, {order: 100, filter: {fake: null}}, event => {
+	mod.hook('C_PLAYER_LOCATION', 5, {order: 100, filter: {fake: null}}, event => {
 		lastLocation = event.loc;
 	});
 
-	dispatch.hook('C_VISIT_NEW_SECTION', 'raw', () => {
+	mod.hook('C_VISIT_NEW_SECTION', 'raw', () => {
 		// If our client doesn't send C_PLAYER_LOCATION before this packet, then it's most likely user input
 		correctLocation = null;
 
 		if(modified) {
-			setTimeout(() => { dispatch.toClient('S_ADMIN_HOLD_CHARACTER', 2, {hold: false}) }, config.loadExtraMs);
+			setTimeout(() => { mod.send('S_ADMIN_HOLD_CHARACTER', 2, {hold: false}) }, mod.settings.loadExtraMs);
 			modified = false;
 		}
 	})
-	dispatch.hook('S_PLAY_MOVIE', 1, {order: 100}, event => {
-		if(config.skipCutscenesZones.includes(lastZone) && config.skipCutscenes && enabled) {
+	mod.hook('S_PLAY_MOVIE', 1, {order: 100}, event => {
+		if(mod.settings.skipCutscenesZones.includes(lastZone) && mod.settings.skipCutscenes && enabled) {
 			
-			dispatch.toServer('C_END_MOVIE', 1, Object.assign({ unk: true }, event));
+			mod.send('C_END_MOVIE', 1, Object.assign({ unk: true }, event));
 			return false;
 		};
 	});
-	this.destructor = () => {command.remove(['ql','quickload'])}
+	this.destructor = () => {mod.command.remove(['ql','quickload'])}
 };

@@ -1,6 +1,9 @@
 # quick-load
 tera-proxy module to bypass loading screens when teleporting into nearby areas
 
+# Requirements
+Requires Caali's proxy https://discord.gg/maqBmJV (or ask Pinkie to merge Caali's core changes into his proxy.)
+
 # Command
 ql, quickload: turns the module on or off.
 
