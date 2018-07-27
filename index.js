@@ -10,7 +10,7 @@ module.exports = function QuickLoad(mod) {
 	mod.command.add(['ql','quickload'], () => {
 
 		mod.settings.enabled = !mod.settings.enabled;
-		mod.command.message('Module ' + (mod.settings.enabled ? 'en' : 'dis') + 'abled')
+		mod.command.message('[Quick-Load] Module ' + (mod.settings.enabled ? 'en' : 'dis') + 'abled')
 	});
 
 	mod.game.on('enter_game', () => {
