@@ -20,7 +20,7 @@ module.exports = function QuickLoad(mod) {
 
 	mod.hook('S_LOAD_TOPO', 3, {order: 100}, event => {
 		quick = event.quick;
-		if(enabled && event.zone === lastZone && (mod.settings.loadExtra || event.loc.dist3D(lastLocation) <= mod.settings.loadDistance) && !mod.settings.blockedZones.includes(event.zone)) {
+		if(mod.settings.enabled && event.zone === lastZone && (mod.settings.loadExtra || event.loc.dist3D(lastLocation) <= mod.settings.loadDistance) && !mod.settings.blockedZones.includes(event.zone)) {
 			return modified = event.quick = true; 
 		    };
 
@@ -86,7 +86,7 @@ module.exports = function QuickLoad(mod) {
 		}
 	})
 	mod.hook('S_PLAY_MOVIE', 1, {order: 100}, event => {
-		if(mod.settings.skipCutscenesZones.includes(lastZone) && mod.settings.skipCutscenes && enabled) {
+		if(mod.settings.skipCutscenesZones.includes(lastZone) && mod.settings.skipCutscenes && mod.settings.enabled) {
 			
 			mod.send('C_END_MOVIE', 1, Object.assign({ unk: true }, event));
 			return false;
