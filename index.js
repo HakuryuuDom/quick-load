@@ -21,8 +21,12 @@ module.exports = function QuickLoad(mod) {
 					mod.command.message('Error: ' + args[1].toString() + ' is not a number!')
 					return;
 				}
-				mod.settings.blockedZones.push(addZone);
-				mod.command.message('Added zone ' + addZone.toString() + ' to blocked zone list.')
+				if(!mod.settings.blockedZones.includes(addZone)) {
+					mod.settings.blockedZones.push(addZone);
+					mod.command.message('Added zone ' + addZone.toString() + ' to blocked zone list.')
+				} else {
+					mod.command.message('Error: Zone ' + addZone.toString() + ' is already being blocked.')
+				}
 				mod.saveSettings();
 				break
 
@@ -37,7 +41,7 @@ module.exports = function QuickLoad(mod) {
 					mod.settings.blockedZones.splice(mod.settings.blockedZones.indexOf(removeZone), 1)
 					mod.command.message('Removed zone ' + removeZone.toString() + ' from blocked zone list.')
 				} else {
-					mod.command.message('Error: ' + removeZone.toString() + ' is not currently being blocked.')
+					mod.command.message('Error: Zone ' + removeZone.toString() + ' is not currently being blocked.')
 				}
 				mod.saveSettings();
 				break
@@ -49,8 +53,12 @@ module.exports = function QuickLoad(mod) {
 					mod.command.message('Error: ' + args[1].toString() + ' is not a number!')
 					return;
 				}
-				mod.settings.skipCutscenesZones.push(addZoneCutscene);
-				mod.command.message('Added zone ' + addZoneCutscene.toString() + ' to blocked cutscene zone list.')
+				if(!mod.settings.skipCutscenesZones.includes(addZoneCutscene)) {
+					mod.settings.skipCutscenesZones.push(addZoneCutscene);
+					mod.command.message('Added zone ' + addZoneCutscene.toString() + ' to blocked cutscene zone list.')
+				} else {
+					mod.command.message('Error: Cutscenes in zone ' + addZoneCutscene.toString() + ' are already being blocked.')
+				}
 				mod.saveSettings();
 				break
 
