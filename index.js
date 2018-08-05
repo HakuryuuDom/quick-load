@@ -11,6 +11,7 @@ module.exports = function QuickLoad(mod) {
 		switch (args[0]) {
 			case null:
 			case '':
+			case undefined:
 				mod.settings.enabled = !mod.settings.enabled;
 				mod.command.message('Module ' + (mod.settings.enabled ? 'en' : 'dis') + 'abled')
 				break
