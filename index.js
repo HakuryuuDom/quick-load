@@ -43,29 +43,29 @@ module.exports = function QuickLoad(mod) {
 				break
 			
 			case 'blockcutscene':
-				let addZone = !args[1] ? lastZone : Number(args[1])
+				let addZoneCutscene = !args[1] ? lastZone : Number(args[1])
 				
-				if(isNaN(addZone)) {
+				if(isNaN(addZoneCutscene)) {
 					mod.command.message('Error: ' + args[1].toString() + ' is not a number!')
 					return;
 				}
-				mod.settings.skipCutscenesZones.push(addZone);
-				mod.command.message('Added zone ' + addZone.toString() + ' to blocked cutscene zone list.')
+				mod.settings.skipCutscenesZones.push(addZoneCutscene);
+				mod.command.message('Added zone ' + addZoneCutscene.toString() + ' to blocked cutscene zone list.')
 				mod.saveSettings();
 				break
 
 			case 'unblockcutscene':
-				let removeZone = !args[1] ? lastZone : Number(args[1])
+				let removeZoneCutscene = !args[1] ? lastZone : Number(args[1])
 			
-				if(isNaN(removeZone)) {
+				if(isNaN(removeZoneCutscene)) {
 					mod.command.message('Error: ' + args[1].toString() + ' is not a number!')
 					return;
 				}
-				if(mod.settings.skipCutscenesZones.includes(removeZone)) {
-					mod.settings.skipCutscenesZones.splice(mod.settings.skipCutscenesZones.indexOf(removeZone), 1)
-					mod.command.message('Removed zone ' + removeZone.toString() + ' from blocked cutscene zone list.')
+				if(mod.settings.skipCutscenesZones.includes(removeZoneCutscene)) {
+					mod.settings.skipCutscenesZones.splice(mod.settings.skipCutscenesZones.indexOf(removeZoneCutscene), 1)
+					mod.command.message('Removed zone ' + removeZoneCutscene.toString() + ' from blocked cutscene zone list.')
 				} else {
-					mod.command.message('Error: Cutscenes in zone ' + removeZone.toString() + ' are not currently being blocked.')
+					mod.command.message('Error: Cutscenes in zone ' + removeZoneCutscene.toString() + ' are not currently being blocked.')
 				}
 				mod.saveSettings();
 				break
@@ -76,7 +76,7 @@ module.exports = function QuickLoad(mod) {
 				break
 
 			default:
-				mod.command.message('Error: ' + args[0].toString() + ' is not a valid command! Available commands: block, unblock, listblock')
+				mod.command.message('Error: ' + args[0].toString() + ' is not a valid command! Available commands: block, unblock, blockcutscene, unblockcutscene, list')
 
 		}
 	});
