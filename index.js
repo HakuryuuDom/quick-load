@@ -13,6 +13,7 @@ module.exports = function QuickLoad(mod) {
 			case '':
 				mod.settings.enabled = !mod.settings.enabled;
 				mod.command.message('Module ' + (mod.settings.enabled ? 'en' : 'dis') + 'abled')
+				break
 			case 'block':
 				let addZone = !args[1] ? lastZone : Number(args[1])
 				
