@@ -14,7 +14,7 @@ module.exports = function QuickLoad(mod) {
 			return;
 		}
 		switch (args[0]) {
-			case 'add':
+			case 'block':
 				let addZone = !args[1] ? lastZone : Number(args[1])
 				
 				if(isNaN(addZone)) {
@@ -26,7 +26,7 @@ module.exports = function QuickLoad(mod) {
 				mod.saveSettings();
 				break
 
-			case 'remove':
+			case 'unblock':
 				let removeZone = !args[1] ? lastZone : Number(args[1])
 			
 				if(isNaN(removeZone)) {
@@ -41,13 +41,42 @@ module.exports = function QuickLoad(mod) {
 				}
 				mod.saveSettings();
 				break
+			
+			case 'blockcutscene':
+				let addZone = !args[1] ? lastZone : Number(args[1])
+				
+				if(isNaN(addZone)) {
+					mod.command.message('Error: ' + args[1].toString() + ' is not a number!')
+					return;
+				}
+				mod.settings.skipCutscenesZones.push(addZone);
+				mod.command.message('Added zone ' + addZone.toString() + ' to blocked cutscene zone list.')
+				mod.saveSettings();
+				break
+
+			case 'unblockcutscene':
+				let removeZone = !args[1] ? lastZone : Number(args[1])
+			
+				if(isNaN(removeZone)) {
+					mod.command.message('Error: ' + args[1].toString() + ' is not a number!')
+					return;
+				}
+				if(mod.settings.skipCutscenesZones.includes(removeZone)) {
+					mod.settings.skipCutscenesZones.splice(mod.settings.skipCutscenesZones.indexOf(removeZone), 1)
+					mod.command.message('Removed zone ' + removeZone.toString() + ' from blocked cutscene zone list.')
+				} else {
+					mod.command.message('Error: Cutscenes in zone ' + removeZone.toString() + ' are not currently being blocked.')
+				}
+				mod.saveSettings();
+				break
 
 			case 'list':
-				mod.command.message(mod.settings.blockedZones.toString())
+				mod.command.message('Blocked Zones: ' + mod.settings.blockedZones.toString())
+				mod.command.message('Cutscenes are blocked in the following zones: ' + mod.settings.skipCutscenesZones.toString())
 				break
 
 			default:
-				mod.command.message('Error: ' + args[0].toString() + ' is not a valid command!')
+				mod.command.message('Error: ' + args[0].toString() + ' is not a valid command! Available commands: block, unblock, listblock')
 
 		}
 	});
