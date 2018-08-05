@@ -7,10 +7,49 @@ module.exports = function QuickLoad(mod) {
 		correctLocation = null,
 		correctAngle = null;
 
-	mod.command.add(['ql','quickload'], () => {
+	mod.command.add(['ql','quickload'], (...args) => {
+		if(!args) {
+			mod.settings.enabled = !mod.settings.enabled;
+			mod.command.message('Module ' + (mod.settings.enabled ? 'en' : 'dis') + 'abled')
+			return;
+		}
+		switch (args[0]) {
+			case 'add':
+				let addZone = !args[1] ? lastZone : args[1].Number()
+				
+				if(addZone.isNaN()) {
+					mod.command.message('Error: ' + args[1].toString() + ' is not a number!')
+					return;
+				}
+				mod.settings.blockedZones.push(addZone);
+				mod.command.message('Added zone ' + addZone.toString() + ' to blocked zone list.')
+				mod.saveSettings();
+				break
 
-		mod.settings.enabled = !mod.settings.enabled;
-		mod.command.message('Module ' + (mod.settings.enabled ? 'en' : 'dis') + 'abled')
+			case 'remove':
+				let removeZone = !args[1] ? lastZone : args[1].Number()
+			
+				if(removeZone.isNaN()) {
+					mod.command.message('Error: ' + args[1].toString() + ' is not a number!')
+					return;
+				}
+				if(mod.settings.blockedZones.includes(removeZone)) {
+					mod.settings.blockedZones.splice(mod.settings.blockedZones.indexOf(removeZone), 1)
+					mod.command.message('Removed zone ' + removeZone.toString() + ' from blocked zone list.')
+				} else {
+					mod.command.message('Error: ' + removeZone.toString() + ' is not currently being blocked.')
+				}
+				mod.saveSettings();
+				break
+
+			case 'list':
+				mod.command.message(mod.settings.blockedZones.toString())
+				break
+
+			default:
+				mod.command.message('Error: ' + args[0].toString() + ' is not a valid command!')
+
+		}
 	});
 
 	mod.game.on('enter_game', () => {
@@ -22,7 +61,7 @@ module.exports = function QuickLoad(mod) {
 		quick = event.quick;
 		if(mod.settings.enabled && event.zone === lastZone && (mod.settings.loadExtra || event.loc.dist3D(lastLocation) <= mod.settings.loadDistance) && !mod.settings.blockedZones.includes(event.zone)) {
 			return modified = event.quick = true; 
-		    };
+		    }
 
 		lastZone = event.zone;
 		modified = false;
@@ -51,7 +90,7 @@ module.exports = function QuickLoad(mod) {
 				inShuttle: 0,
 				time: 0
 			});
-		};
+		}
 	});
 
 	mod.hook('S_ADMIN_HOLD_CHARACTER', 'raw', () => !modified && undefined);
@@ -67,9 +106,9 @@ module.exports = function QuickLoad(mod) {
 				});
 				correctLocation = null;
 				return false;
-			};
+			}
 			correctLocation = null;
-		};
+		}
 	});
 
 	mod.hook('C_PLAYER_LOCATION', 5, {order: 100, filter: {fake: null}}, event => {
@@ -90,7 +129,7 @@ module.exports = function QuickLoad(mod) {
 			
 			mod.send('C_END_MOVIE', 1, Object.assign({ unk: true }, event));
 			return false;
-		};
+		}
 	});
 	this.destructor = () => {mod.command.remove(['ql','quickload'])}
 };
