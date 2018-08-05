@@ -8,12 +8,11 @@ module.exports = function QuickLoad(mod) {
 		correctAngle = null;
 
 	mod.command.add(['ql','quickload'], (...args) => {
-		if(!args) {
-			mod.settings.enabled = !mod.settings.enabled;
-			mod.command.message('Module ' + (mod.settings.enabled ? 'en' : 'dis') + 'abled')
-			return;
-		}
 		switch (args[0]) {
+			case null:
+			case '':
+				mod.settings.enabled = !mod.settings.enabled;
+				mod.command.message('Module ' + (mod.settings.enabled ? 'en' : 'dis') + 'abled')
 			case 'block':
 				let addZone = !args[1] ? lastZone : Number(args[1])
 				
