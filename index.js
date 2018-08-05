@@ -15,9 +15,9 @@ module.exports = function QuickLoad(mod) {
 		}
 		switch (args[0]) {
 			case 'add':
-				let addZone = !args[1] ? lastZone : args[1].Number()
+				let addZone = !args[1] ? lastZone : Number(args[1])
 				
-				if(addZone === NaN) {
+				if(isNaN(addZone)) {
 					mod.command.message('Error: ' + args[1].toString() + ' is not a number!')
 					return;
 				}
@@ -27,9 +27,9 @@ module.exports = function QuickLoad(mod) {
 				break
 
 			case 'remove':
-				let removeZone = !args[1] ? lastZone : args[1].Number()
+				let removeZone = !args[1] ? lastZone : Number(args[1])
 			
-				if(removeZone === NaN) {
+				if(isNaN(removeZone)) {
 					mod.command.message('Error: ' + args[1].toString() + ' is not a number!')
 					return;
 				}
