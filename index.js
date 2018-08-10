@@ -17,7 +17,7 @@ module.exports = function QuickLoad(mod) {
 		}
 		else {
 			mod.settings.configOption = input
-			mod.command.message(name + ' set to: ' + input.toString()'.')
+			mod.command.message(name + ' set to: ' + input.toString() + '.')
 		}
 	}
 
