@@ -11,13 +11,15 @@ module.exports = function QuickLoad(mod) {
 		let input = Number(data)
 		if(isNaN(input)) {
 			mod.command.message(name + ': ' + configOption.toString())
+			return configOption
 		} 
 		else if(input <= 0) {
 			mod.command.message('Error: ' + name + ' cannot be negative or zero.')
+			return configOption
 		}
 		else {
-			configOption = input
 			mod.command.message(name + ' set to: ' + input.toString() + '.')
+			return input
 		}
 	}
 
@@ -100,7 +102,7 @@ module.exports = function QuickLoad(mod) {
 				break
 
 			case 'loaddistance':
-				commandNumber(mod.settings.loadDistance, args[1], 'Load Distance')
+				mod.settings.loadDistance = commandNumber(mod.settings.loadDistance, args[1], 'Load Distance')
 				break
 
 			case 'loadextra':
@@ -109,7 +111,7 @@ module.exports = function QuickLoad(mod) {
 				break
 
 			case 'loadextrams':
-				commandNumber(mod.settings.loadExtraMs, args[1], 'Load Extra ms')
+				mod.settings.loadExtraMs = commandNumber(mod.settings.loadExtraMs, args[1], 'Load Extra ms')
 				break
 
 			default:
