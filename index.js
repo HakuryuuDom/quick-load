@@ -7,6 +7,22 @@ module.exports = function QuickLoad(mod) {
 		correctLocation = null,
 		correctAngle = null;
 
+	function commandNumber(configOption, data, name) {
+		let input = Number(data)
+		if(isNaN(input)) {
+			mod.command.message(name + ': ' + configOption.toString())
+			return configOption
+		} 
+		else if(input <= 0) {
+			mod.command.message('Error: ' + name + ' cannot be negative or zero.')
+			return configOption
+		}
+		else {
+			mod.command.message(name + ' set to: ' + input.toString() + '.')
+			return input
+		}
+	}
+
 	mod.command.add(['ql','quickload'], (...args) => {
 		switch (args[0]) {
 			case null:
@@ -28,7 +44,6 @@ module.exports = function QuickLoad(mod) {
 				} else {
 					mod.command.message('Error: Zone ' + addZone.toString() + ' is already being blocked.')
 				}
-				mod.saveSettings();
 				break
 
 			case 'unblock':
@@ -44,7 +59,6 @@ module.exports = function QuickLoad(mod) {
 				} else {
 					mod.command.message('Error: Zone ' + removeZone.toString() + ' is not currently being blocked.')
 				}
-				mod.saveSettings();
 				break
 			
 			case 'blockcutscene':
@@ -60,7 +74,6 @@ module.exports = function QuickLoad(mod) {
 				} else {
 					mod.command.message('Error: Cutscenes in zone ' + addZoneCutscene.toString() + ' are already being blocked.')
 				}
-				mod.saveSettings();
 				break
 
 			case 'unblockcutscene':
@@ -76,7 +89,6 @@ module.exports = function QuickLoad(mod) {
 				} else {
 					mod.command.message('Error: Cutscenes in zone ' + removeZoneCutscene.toString() + ' are not currently being blocked.')
 				}
-				mod.saveSettings();
 				break
 
 			case 'list':
@@ -84,10 +96,29 @@ module.exports = function QuickLoad(mod) {
 				mod.command.message('Cutscenes are blocked in the following zones: ' + mod.settings.skipCutscenesZones.toString())
 				break
 
+			case 'skip':
+				mod.settings.skipCutscenes = !mod.settings.skipCutscenes;
+				mod.command.message('Cutscene skipping ' + (mod.settings.skipCutscenes ? 'en' : 'dis') + 'abled')
+				break
+
+			case 'loaddistance':
+				mod.settings.loadDistance = commandNumber(mod.settings.loadDistance, args[1], 'Load Distance')
+				break
+
+			case 'loadextra':
+				mod.settings.loadExtra = !mod.settings.loadExtra
+				mod.command.message('Load Extra ' + (mod.settings.loadExtra ? 'en' : 'dis') + 'abled')
+				break
+
+			case 'loadextrams':
+				mod.settings.loadExtraMs = commandNumber(mod.settings.loadExtraMs, args[1], 'Load Extra ms')
+				break
+
 			default:
-				mod.command.message('Error: ' + args[0].toString() + ' is not a valid command! Available commands: block, unblock, blockcutscene, unblockcutscene, list')
+				mod.command.message('Error: ' + args[0] + ' is not a valid command! Available commands: block, unblock, blockcutscene, unblockcutscene, list, skip, loaddistance, loadextra, loadextrams')
 
 		}
+		mod.saveSettings();
 	});
 
 	mod.game.on('enter_game', () => {
