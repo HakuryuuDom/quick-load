@@ -115,7 +115,7 @@ module.exports = function QuickLoad(mod) {
 				break
 
 			default:
-				mod.command.message('Error: ' + args[0].toString() + ' is not a valid command! Available commands: block, unblock, blockcutscene, unblockcutscene, list')
+				mod.command.message('Error: ' + args[0] + ' is not a valid command! Available commands: block, unblock, blockcutscene, unblockcutscene, list, skip, loaddistance, loadextra, loadextrams')
 
 		}
 		mod.saveSettings();
