@@ -39,6 +39,9 @@ module.exports = function MigrateSettings(from_ver, to_ver, settings) {
             	settings.enabled = true;
 				break;
 			case 3:
+				settings.options = {};
+				settings.options.loadDistance = {};
+				settings.options.loadExtraMs = {};
 				settings.options.loadDistance.value = settings.loadDistance;
 				settings.options.loadDistance.name = "Load Distance";
 				settings.options.loadExtraMs.value = settings.loadExtraMs;
