@@ -39,13 +39,16 @@ module.exports = function MigrateSettings(from_ver, to_ver, settings) {
             	settings.enabled = true;
 				break;
 			case 3:
-				settings.options = {};
-				settings.options.loadDistance = {};
-				settings.options.loadExtraMs = {};
-				settings.options.loadDistance.value = settings.loadDistance;
-				settings.options.loadDistance.name = "Load Distance";
-				settings.options.loadExtraMs.value = settings.loadExtraMs;
-				settings.options.loadExtraMs.name = "Load Extra Ms";
+				settings.options = {
+					loadDistance: {
+						name: "Load Distance",
+						value: settings.loadDistance
+					},
+					loadExtraMs: {
+						name: "Load Extra Ms",
+						value: settings.loadExtraMs
+					}
+				};
 				settings.safeMode = true;
 				delete settings.loadDistance;
 				delete settings.loadExtraMs;
