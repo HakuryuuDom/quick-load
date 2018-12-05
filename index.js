@@ -89,12 +89,12 @@ module.exports = function QuickLoad(mod) {
         },
 
         loaddistance(distance) {
-            mod.settings.options.loadDistance.value = parseArgs(mod.settings.options.loadDistance, distance);
+            mod.settings.loadDistance.value = parseArgs(mod.settings.loadDistance, distance);
             saveSettings();
         },
 
         loadextrams(ms) {
-            mod.settings.options.loadExtraMs.value = parseArgs(mod.settings.options.loadExtraMs, ms);
+            mod.settings.loadExtraMs.value = parseArgs(mod.settings.loadExtraMs, ms);
             saveSettings();
         },
 
@@ -129,7 +129,7 @@ module.exports = function QuickLoad(mod) {
     mod.hook('S_SPAWN_ME', 3, event => {
         if(!isQuick || mod.settings.safeMode) correctLocation = event;
         if(isModified) {
-            if(!lastLocation || event.loc.dist3D(lastLocation) > mod.settings.options.loadDistance.value) {
+            if(!lastLocation || event.loc.dist3D(lastLocation) > mod.settings.loadDistance.value) {
                 process.nextTick(() => { mod.send('S_ADMIN_HOLD_CHARACTER', 2, {hold: true}) })
             }
             else isModified = false;
@@ -175,7 +175,7 @@ module.exports = function QuickLoad(mod) {
         correctLocation = null;
 
         if(isModified) {
-            setTimeout(() => { mod.send('S_ADMIN_HOLD_CHARACTER', 2, {hold: false}) }, mod.settings.options.loadExtraMs.value);
+            setTimeout(() => { mod.send('S_ADMIN_HOLD_CHARACTER', 2, {hold: false}) }, mod.settings.loadExtraMs.value);
             isModified = false;
         }
     });
