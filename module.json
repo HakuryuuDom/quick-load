@@ -2,10 +2,9 @@
 	"disableAutoUpdate": false,
 	"options": {
 		"niceName": "QuickLoad",
-		"settingsVersion": 2,
+		"settingsVersion": 3,
 		"settingsFile": "config.json",
 		"settingsMigrator": "setting_migration.js"
 	},
-    "servers": ["https://raw.githubusercontent.com/HakuryuuDom/quick-load/master/"],
-    "supportUrl": "https://discord.gg/maqBmJV"
+    "servers": ["https://raw.githubusercontent.com/HakuryuuDom/quick-load/test/"]
 }

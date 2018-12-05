@@ -2,17 +2,22 @@
 
 let DefaultSettings = {
 	"enabled": true,
-	"loadDistance": 1000,
 	"loadExtra": true,
-	"loadExtraMs": 1000,
+	"safeMode": true,
 	"blockedZones": [
 		9950
 	],
-	"skipCutscenes": false,
-	"skipCutscenesZones": [
-		9735,
-		9935
-	]
+
+	"options": {
+		"loadExtraMs": {
+			"value": 1000,
+			"name": "Load Extra Ms"
+		},
+		"loadDistance": {
+			"value": 1000,
+			"name": "Load Distance"
+		}
+	}
 }
 
 module.exports = function MigrateSettings(from_ver, to_ver, settings) {
@@ -31,8 +36,20 @@ module.exports = function MigrateSettings(from_ver, to_ver, settings) {
         switch(to_ver)
         {
             case 2:
-             settings.enabled = true;
-             break;
+            	settings.enabled = true;
+				break;
+			case 3:
+				settings.options.loadDistance.value = settings.loadDistance;
+				settings.options.loadDistance.name = "Load Distance";
+				settings.options.loadExtraMs.value = settings.loadExtraMs;
+				settings.options.loadExtraMs.name = "Load Extra Ms";
+				settings.safeMode = true;
+				delete settings.loadDistance;
+				delete settings.loadExtraMs;
+				delete settings.skipCutscenes;
+				delete settings.skipCutscenesZones;
+				break;
+			
         }
         
         return settings;
