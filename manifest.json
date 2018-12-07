@@ -1,7 +1,9 @@
 {
 	"files": {
-		"index.js": "1e0de30b3550fce6d3f7c2748d3a041128f74a3ab1bd8c3c8a631edaba3932da",
-		"module.json": "50ade124b2fb7a5caf1980fd6cb6abe092f9923e9ade161d4b49b74be5d019d0",
+		"LICENSE": "0b383d5a63da644f628d99c33976ea6487ed89aaa59f0b3257992deac1171e6b",
+		"README.md": "02fbf9d55cbd1fbc0d9fff10977d40b411e3f0357c45e3fd2ed5054dcde20bd0",
+		"index.js": "876350cdb50b2b93388fd25ad433cbe9303471ae3e262e3ef4e8fc7dcbd8478f",
+		"module.json": "228c094c9bc99d649e5344df18f868f74e09dcc1bbb686fb1b6a902a5dd3a6db",
 		"setting_migration.js": "e19a4b05821cf13f874cd674b04c5390e45c8bdd9b737c8634dac0396da2b4d0"
 	},
 	"defs": {

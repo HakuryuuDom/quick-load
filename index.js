@@ -1,27 +1,12 @@
 // <3 Pinkie Pie :3 - fork by Haku
 module.exports = function QuickLoad(mod) {
-    //pinkie proxy
-    const command = mod.command || mod.require.command;
-    const game = mod.game || mod.require['tera-game-state'];
-    if (mod.proxyAuthor !== 'caali') {
-        const options = require('./module').options;
-        if (options) {
-            const settingsVersion = options.settingsVersion;
-            if (settingsVersion) {
-                let settings = require('./' + (options.settingsMigrator))(settings._version, settingsVersion, settings);
-                settings._version = settingsVersion;
-            }
-        }
-    }
-    function saveSettings() {
-        if (mod.proxyAuthor !== 'caali') return;
-        mod.saveSettings();
-    }
+    
     let lastZone = null;
     let isQuick = false;
     let isModified = false;
     let lastLocation = null;
     let correctLocation = null;
+    let isClimbing = false;
 
     function resetAll() {
         lastZone = null;
@@ -29,7 +14,7 @@ module.exports = function QuickLoad(mod) {
     }
 
     function message(text) {
-        command.message(text);
+        mod.command.message(text);
     }
 
     function parseArgs(option, data) {
@@ -155,7 +140,7 @@ module.exports = function QuickLoad(mod) {
             // Did we accidentally spawn under the map? Let's fix that!
             if(event.loc.z !== correctLocation.loc.z) {
                 mod.send('S_INSTANT_MOVE', 3, {
-                    gameId: game.me.gameId,
+                    gameId: mod.game.me.gameId,
                     loc: correctLocation.loc,
                     w: correctLocation.w
                 });
@@ -180,5 +165,6 @@ module.exports = function QuickLoad(mod) {
         }
     });
 
-    this.destructor = () => { command.remove(['ql', 'quickload']) };
+
+    this.destructor = () => { mod.command.remove(['ql', 'quickload']) };
 };

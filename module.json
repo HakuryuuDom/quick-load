@@ -1,8 +1,12 @@
 {
 	"disableAutoUpdate": false,
+	"name": "quick-load",
+	"author": "HakuryuuDom / Pinkie Pie",
+	"description": "Bypasses loadscreens when switching channels or teleporting within the same zone.",
+	"version": "2.0",
 	"options": {
 		"niceName": "QuickLoad",
-		"settingsVersion": 3,
+		"settingsVersion": 4,
 		"settingsFile": "config.json",
 		"settingsMigrator": "setting_migration.js"
 	},
