@@ -1,15 +1,17 @@
 {
 	"files": {
-		"index.js": "f977e3d123d299eb5e414f6c43d533677d66f6274c247c6e948e01393bd537e7",
+		"index.js": "df7709172a5707431a32f6b9fa3b7ac189667ef100ee0901dc5cc73eb7e48a6b",
 		"module.json": "228c094c9bc99d649e5344df18f868f74e09dcc1bbb686fb1b6a902a5dd3a6db",
 		"setting_migration.js": "e19a4b05821cf13f874cd674b04c5390e45c8bdd9b737c8634dac0396da2b4d0"
 	},
 	"defs": {
+		"C_END_CLIMBING": 2,
 		"C_PLAYER_LOCATION": 5,
 		"C_VISIT_NEW_SECTION": "raw",
 		"S_ADMIN_HOLD_CHARACTER": [2,"raw"],
 		"S_INSTANT_MOVE": 3,
 		"S_LOAD_TOPO": 3,
-		"S_SPAWN_ME": 3
+		"S_SPAWN_ME": 3,
+		"S_START_CLIMBING": 1
 	}
 }

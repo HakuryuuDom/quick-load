@@ -6,6 +6,7 @@ module.exports = function QuickLoad(mod) {
     let isModified = false;
     let lastLocation = null;
     let correctLocation = null;
+    let isClimbing = false;
 
     function resetAll() {
         lastZone = null;
@@ -114,6 +115,12 @@ module.exports = function QuickLoad(mod) {
                 time: 0
 
             })
+            if(isClimbing) {
+                mod.send('C_END_CLIMBING', 2, {
+                    loc: event.loc,
+                    w: 0
+                })
+            }
             return isModified = event.quick = true;
         }
 
@@ -175,6 +182,15 @@ module.exports = function QuickLoad(mod) {
         }
     });
 
+    mod.hook('S_START_CLIMBING', 1, event => {
+        if(mod.game.me.is(event.gameId)) {
+            isClimbing = true;
+        }
+    })
+
+    mod.hook('C_END_CLIMBING', 2, () => {
+        isClimbing = false;
+    })
 
     this.destructor = () => { mod.command.remove(['ql', 'quickload']) };
 };
