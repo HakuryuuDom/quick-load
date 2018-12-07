@@ -116,7 +116,8 @@ module.exports = function QuickLoad(mod) {
 
             })
             if(isClimbing) {
-                mod.send('C_END_CLIMBING', 2, {
+                mod.send('S_INSTANT_MOVE', 3, {
+                    gameId: mod.game.me.gameId,
                     loc: event.loc,
                     w: 0
                 })
