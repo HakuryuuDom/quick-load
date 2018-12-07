@@ -6,7 +6,6 @@ module.exports = function QuickLoad(mod) {
     let isModified = false;
     let lastLocation = null;
     let correctLocation = null;
-    let isClimbing = false;
 
     function resetAll() {
         lastZone = null;
@@ -70,29 +69,29 @@ module.exports = function QuickLoad(mod) {
             else {
                 message('Error: Zone ' + delZone.toString() + ' is not currently being blocked.');
             }
-            saveSettings();
+            mod.saveSettings();
         },
 
         loaddistance(distance) {
             mod.settings.loadDistance.value = parseArgs(mod.settings.loadDistance, distance);
-            saveSettings();
+            mod.saveSettings();
         },
 
         loadextrams(ms) {
             mod.settings.loadExtraMs.value = parseArgs(mod.settings.loadExtraMs, ms);
-            saveSettings();
+            mod.saveSettings();
         },
 
         loadextra() {
             mod.settings.loadExtra = !mod.settings.loadExtra;
             message('Load Extra: ' + (mod.settings.loadExtra ? 'en' : 'dis') + 'abled');
-            saveSettings();
+            mod.saveSettings();
         },
 
         safe() {
             mod.settings.safeMode = !mod.settings.safeMode;
             message('Safe Mode: ' + (mod.settings.safeMode ? 'en' : 'dis') + 'abled');
-            saveSettings();
+            mod.saveSettings();
         }
 
     });
@@ -104,6 +103,17 @@ module.exports = function QuickLoad(mod) {
     mod.hook('S_LOAD_TOPO', 3, { order: 100 }, event => {
         isQuick = event.quick;
         if (mod.settings.enabled && event.zone === lastZone && (mod.settings.loadExtra || event.loc.dist3D(lastLocation) <= mod.settings.loadDistance) && !mod.settings.blockedZones.includes(event.zone)) {
+            mod.send('C_PLAYER_LOCATION', 5, { //ladder fix, might break other stuff. needs testing.
+                loc: event.loc,
+                w: 0,
+                lookDirection: 0,
+                dest: event.loc,
+                type: 7,
+                jumpDistance: 0,
+                inShuttle: false,
+                time: 0
+
+            })
             return isModified = event.quick = true;
         }
 
