@@ -6,7 +6,6 @@ module.exports = function QuickLoad(mod) {
     let isModified = false;
     let lastLocation = null;
     let correctLocation = null;
-    let isClimbing = false;
 
     function resetAll() {
         lastZone = null;
@@ -31,6 +30,19 @@ module.exports = function QuickLoad(mod) {
             message(option.name + ' set to: ' + input.toString() + '.');
             return input;
         }
+    }
+
+    function updatePos(loc) {
+        mod.send('C_PLAYER_LOCATION', 5, {
+            loc: loc,
+            w: 0,
+            lookDirection: 0,
+            dest: loc,
+            type: 7,
+            jumpDistance: 0,
+            inShuttle: false,
+            time: 0
+        })
     }
 
     mod.command.add(['ql', 'quickload'], {
@@ -104,24 +116,13 @@ module.exports = function QuickLoad(mod) {
     mod.hook('S_LOAD_TOPO', 3, { order: 100 }, event => {
         isQuick = event.quick;
         if (mod.settings.enabled && event.zone === lastZone && (mod.settings.loadExtra || event.loc.dist3D(lastLocation) <= mod.settings.loadDistance) && !mod.settings.blockedZones.includes(event.zone)) {
-            mod.send('C_PLAYER_LOCATION', 5, { //ladder fix, might break other stuff. needs testing.
+            updatePos(event.loc); //ladder fix
+            mod.send('S_INSTANT_MOVE', 3, {
+                gameId: mod.game.me.gameId,
                 loc: event.loc,
-                w: 0,
-                lookDirection: 0,
-                dest: event.loc,
-                type: 7,
-                jumpDistance: 0,
-                inShuttle: false,
-                time: 0
-
+                w: 0
             })
-            if(isClimbing) {
-                mod.send('S_INSTANT_MOVE', 3, {
-                    gameId: mod.game.me.gameId,
-                    loc: event.loc,
-                    w: 0
-                })
-            }
+
             return isModified = event.quick = true;
         }
 
@@ -138,16 +139,7 @@ module.exports = function QuickLoad(mod) {
             else isModified = false;
 
             mod.send('S_SPAWN_ME', 3, event) // Bring our character model back from the void
-            mod.send('C_PLAYER_LOCATION', 5, { // Update our position on the server
-                loc: event.loc,
-                w: event.w,
-                lookDirection: 0,
-                dest: event.loc,
-                type: 7,
-                jumpDistance: 0,
-                inShuttle: 0,
-                time: 0
-            })
+            updatePos(event.loc); // Update our position on the server
         }
     });
 
@@ -182,16 +174,6 @@ module.exports = function QuickLoad(mod) {
             isModified = false;
         }
     });
-
-    mod.hook('S_START_CLIMBING', 1, event => {
-        if(mod.game.me.is(event.gameId)) {
-            isClimbing = true;
-        }
-    })
-
-    mod.hook('C_END_CLIMBING', 2, () => {
-        isClimbing = false;
-    })
 
     this.destructor = () => { mod.command.remove(['ql', 'quickload']) };
 };
