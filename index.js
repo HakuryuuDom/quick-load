@@ -49,6 +49,7 @@ module.exports = function QuickLoad(mod) {
         $none() {
             mod.settings.enabled = !mod.settings.enabled;
             message('Module ' + (mod.settings.enabled ? 'en' : 'dis') + 'abled');
+            mod.saveSettings();
         },
 
         $default(arg) {
@@ -66,7 +67,7 @@ module.exports = function QuickLoad(mod) {
             } else {
                 message('Error: Zone ' + addZone.toString() + ' is already being blocked.');
             }
-            saveSettings();
+            mod.saveSettings();
 
         },
 
