@@ -33,7 +33,7 @@ module.exports = function QuickLoad(mod) {
     }
 
     function updatePos(event) {
-        let w = event.w || lastLocation.w
+        let w = !event.w ? lastLocation.w : event.w;
         mod.send('C_PLAYER_LOCATION', 5, {
             loc: event.loc,
             w: w,
