@@ -117,7 +117,7 @@ module.exports = function QuickLoad(mod) {
 
     mod.hook('S_LOAD_TOPO', 3, { order: 100 }, event => {
         isQuick = event.quick;
-        if (mod.settings.enabled && event.zone === lastZone && (mod.settings.loadExtra || event.loc.dist3D(lastLocation) <= mod.settings.loadDistance) && !mod.settings.blockedZones.includes(event.zone)) {
+        if (mod.settings.enabled && event.zone === lastZone && (mod.settings.loadExtra || event.loc.dist3D(lastLocation.loc) <= mod.settings.loadDistance) && !mod.settings.blockedZones.includes(event.zone)) {
             updatePos(event); //ladder fix
             mod.send('S_INSTANT_MOVE', 3, {
                 gameId: mod.game.me.gameId,
@@ -135,7 +135,7 @@ module.exports = function QuickLoad(mod) {
     mod.hook('S_SPAWN_ME', 3, event => {
         if(!isQuick || mod.settings.safeMode) correctLocation = event;
         if(isModified) {
-            if(!lastLocation || event.loc.dist3D(lastLocation) > mod.settings.loadDistance.value) {
+            if(!lastLocation || event.loc.dist3D(lastLocation.loc) > mod.settings.loadDistance.value) {
                 process.nextTick(() => { mod.send('S_ADMIN_HOLD_CHARACTER', 2, {hold: true}) })
             }
             else isModified = false;
@@ -164,7 +164,7 @@ module.exports = function QuickLoad(mod) {
     });
 
     mod.hook('C_PLAYER_LOCATION', 5, {order: 100, filter: {fake: null}}, event => {
-        lastLocation = event.loc;
+        lastLocation = event;
     });
 
     mod.hook('C_VISIT_NEW_SECTION', 'raw', () => {
