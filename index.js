@@ -122,7 +122,7 @@ module.exports = function QuickLoad(mod) {
             mod.send('S_INSTANT_MOVE', 3, {
                 gameId: mod.game.me.gameId,
                 loc: event.loc,
-                w: 0
+                w: lastLocation.w
             })
 
             return isModified = event.quick = true;
