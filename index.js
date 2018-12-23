@@ -32,12 +32,13 @@ module.exports = function QuickLoad(mod) {
         }
     }
 
-    function updatePos(loc) {
+    function updatePos(event) {
+        let w = !event.w ? lastLocation.w : event.w;
         mod.send('C_PLAYER_LOCATION', 5, {
-            loc: loc,
-            w: 0,
+            loc: event.loc,
+            w: w,
             lookDirection: 0,
-            dest: loc,
+            dest: event.loc,
             type: 7,
             jumpDistance: 0,
             inShuttle: false,
@@ -116,12 +117,12 @@ module.exports = function QuickLoad(mod) {
 
     mod.hook('S_LOAD_TOPO', 3, { order: 100 }, event => {
         isQuick = event.quick;
-        if (mod.settings.enabled && event.zone === lastZone && (mod.settings.loadExtra || event.loc.dist3D(lastLocation) <= mod.settings.loadDistance) && !mod.settings.blockedZones.includes(event.zone)) {
-            updatePos(event.loc); //ladder fix
+        if (mod.settings.enabled && event.zone === lastZone && (mod.settings.loadExtra || event.loc.dist3D(lastLocation.loc) <= mod.settings.loadDistance) && !mod.settings.blockedZones.includes(event.zone)) {
+            updatePos(event); //ladder fix
             mod.send('S_INSTANT_MOVE', 3, {
                 gameId: mod.game.me.gameId,
                 loc: event.loc,
-                w: 0
+                w: lastLocation.w
             })
 
             return isModified = event.quick = true;
@@ -134,13 +135,13 @@ module.exports = function QuickLoad(mod) {
     mod.hook('S_SPAWN_ME', 3, event => {
         if(!isQuick || mod.settings.safeMode) correctLocation = event;
         if(isModified) {
-            if(!lastLocation || event.loc.dist3D(lastLocation) > mod.settings.loadDistance.value) {
+            if(!lastLocation || event.loc.dist3D(lastLocation.loc) > mod.settings.loadDistance.value) {
                 process.nextTick(() => { mod.send('S_ADMIN_HOLD_CHARACTER', 2, {hold: true}) })
             }
             else isModified = false;
 
             mod.send('S_SPAWN_ME', 3, event) // Bring our character model back from the void
-            updatePos(event.loc); // Update our position on the server
+            updatePos(event); // Update our position on the server
         }
     });
 
@@ -163,7 +164,7 @@ module.exports = function QuickLoad(mod) {
     });
 
     mod.hook('C_PLAYER_LOCATION', 5, {order: 100, filter: {fake: null}}, event => {
-        lastLocation = event.loc;
+        lastLocation = event;
     });
 
     mod.hook('C_VISIT_NEW_SECTION', 'raw', () => {

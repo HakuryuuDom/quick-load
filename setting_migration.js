@@ -2,7 +2,7 @@
 
 let DefaultSettings = {
 	"enabled": true,
-	"loadExtra": true,
+	"loadExtra": false,
 	"safeMode": true,
 	"blockedZones": [
 		9950
