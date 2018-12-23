@@ -2,7 +2,7 @@
 	"files": {
 		"index.js": "ebcceb5d234a025614f65a0fb72c717e4284b2be1ca780f28b8b5f780abdaede",
 		"module.json": "228c094c9bc99d649e5344df18f868f74e09dcc1bbb686fb1b6a902a5dd3a6db",
-		"setting_migration.js": "e19a4b05821cf13f874cd674b04c5390e45c8bdd9b737c8634dac0396da2b4d0"
+		"setting_migration.js": "cf4eccb45949375168c1eaa506ecfb68737657a0c3460c61a58e295608157088"
 	},
 	"defs": {
 		"C_PLAYER_LOCATION": 5,
