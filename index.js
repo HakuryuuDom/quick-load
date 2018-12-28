@@ -33,10 +33,9 @@ module.exports = function QuickLoad(mod) {
     }
 
     function updatePos(event) {
-        let w = !event.w ? lastLocation.w : event.w;
         mod.send('C_PLAYER_LOCATION', 5, {
             loc: event.loc,
-            w: w,
+            w: event.w || lastLocation.w || 0,
             lookDirection: 0,
             dest: event.loc,
             type: 7,
@@ -122,9 +121,9 @@ module.exports = function QuickLoad(mod) {
             mod.send('S_INSTANT_MOVE', 3, {
                 gameId: mod.game.me.gameId,
                 loc: event.loc,
-                w: lastLocation.w
+                w: lastLocation.w || 0
             })
-
+            
             return isModified = event.quick = true;
         }
 
