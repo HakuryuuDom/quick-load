@@ -118,13 +118,14 @@ module.exports = function QuickLoad(mod) {
     mod.hook('S_LOAD_TOPO', 3, { order: 100 }, event => {
         isQuick = event.quick;
         if (mod.settings.enabled && event.zone === lastZone && (mod.settings.loadExtra || event.loc.dist3D(lastLocation.loc) <= mod.settings.loadDistance) && !mod.settings.blockedZones.includes(event.zone)) {
-            updatePos(event); //ladder fix
-            mod.send('S_INSTANT_MOVE', 3, {
-                gameId: mod.game.me.gameId,
-                loc: event.loc,
-                w: lastLocation.w
-            })
-
+            if(lastLocation) {
+                updatePos(event); //ladder fix
+                mod.send('S_INSTANT_MOVE', 3, {
+                    gameId: mod.game.me.gameId,
+                    loc: event.loc,
+                    w: lastLocation.w
+                })
+            }
             return isModified = event.quick = true;
         }
 
