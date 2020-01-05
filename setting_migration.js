@@ -4,9 +4,7 @@ let DefaultSettings = {
 	"enabled": true,
 	"loadExtra": false,
 	"safeMode": true,
-	"blockedZones": [
-		9950
-	],
+	"blockDungeon": true,
 	"loadExtraMs": {
 		"value": 1000,
 		"name": "Load Extra Ms"
@@ -63,6 +61,11 @@ module.exports = function MigrateSettings(from_ver, to_ver, settings) {
 					value: settings.options.loadExtraMs.value
 				};
 				delete settings.options;
+				break;
+			case 5: //change to block in all dungeons
+				settings.blockDungeon = true;
+				delete settings.blockedZones;
+				break;
         }
         
         return settings;

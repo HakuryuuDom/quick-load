@@ -1,12 +1,14 @@
 {
 	"files": {
-		"index.js": "3afdfb1ac2626dfdd02c42bd8b2ffd88c90441536b18db9f287d149c2baa1a15",
-		"module.json": "f148975902726b9d9cb4c9634008ffdce88bd4ef06317adba01e4009d82fae5e",
-		"setting_migration.js": "cf4eccb45949375168c1eaa506ecfb68737657a0c3460c61a58e295608157088"
+		"LICENSE": "8ceb4b9ee5adedde47b31e975c1d90c73ad27b6b165a1dcd80c7c545eb65b903",
+		"README.md": "8ad27fd3397df2ca5db693d8fbadce78b2375ccc044b8bf2b02c3377808166f9",
+		"index.js": "80554a7936935c6511a75b4ad7807bf23bee91a454c8cc7e448af681001cd7b6",
+		"module.json": "9a0abf91e59548de051026ab914a385591e3de94af3a7c567140fba8cc0527eb",
+		"setting_migration.js": "fc03a1b481f72f5b27913b8f6ece71d19207de113d2c504930872c896c26c950"
 	},
 	"defs": {
 		"C_PLAYER_LOCATION": 5,
-		"C_VISIT_NEW_SECTION": "raw",
+		"C_VISIT_NEW_SECTION": "event",
 		"S_ADMIN_HOLD_CHARACTER": [2,"raw"],
 		"S_INSTANT_MOVE": 3,
 		"S_LOAD_TOPO": 3,

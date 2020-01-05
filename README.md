@@ -13,7 +13,7 @@ loadExtra: Disable this if you experience too many bugs. This will remove loadin
 
 loadExtraMs: Increase this if you experience falling due to collision maps taking too long to load.
 
-blockedZones: Some zones behave weirdly if the loading screen is skipped, add it here to disable the mod for that zone. (ie Harrowhold)
+blockDungeon: Some zones behave weirdly if the loading screen is skipped, add it here to disable the mod for that zone. (ie Harrowhold)
 
 
 # Known Issues
