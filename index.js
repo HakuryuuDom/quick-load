@@ -56,33 +56,9 @@ module.exports = function QuickLoad(mod) {
             message('Error: ' + arg + ' is not a valid command!');
         },
 
-        block(zone) {
-            let addZone = !zone ? lastZone : Number(zone);
-            if (isNaN(addZone)) {
-                message('Error: ' + zone.toString() + ' is not a number!');
-            }
-            else if (!mod.settings.blockedZones.includes(addZone)) {
-                mod.settings.blockedZones.push(addZone);
-                message('Added zone ' + addZone.toString() + ' to blocked zone list.');
-            } else {
-                message('Error: Zone ' + addZone.toString() + ' is already being blocked.');
-            }
-            mod.saveSettings();
-
-        },
-
-        unblock(zone) {
-            let delZone = !zone ? lastZone : Number(zone);
-            if (isNaN(delZone)) {
-                message('Error: ' + zone.toString() + ' is not a number!');
-            }
-            else if (mod.settings.blockedZones.includes(delZone)) {
-                mod.settings.blockedZones.splice(mod.settings.blockedZones.indexOf(delZone), 1);
-                message('Removed zone ' + delZone.toString() + ' from blocked zone list.');
-            }
-            else {
-                message('Error: Zone ' + delZone.toString() + ' is not currently being blocked.');
-            }
+        blockdungeon() {
+            mod.settings.blockDungeon = !mod.settings.blockDungeon;
+            message('Block in dungeons: ' + (mod.settings.loadExtra ? 'en' : 'dis') + 'abled');
             mod.saveSettings();
         },
 
@@ -116,7 +92,8 @@ module.exports = function QuickLoad(mod) {
 
     mod.hook('S_LOAD_TOPO', 3, { order: 100 }, event => {
         isQuick = event.quick;
-        if (mod.settings.enabled && event.zone === lastZone && (mod.settings.loadExtra || event.loc.dist3D(lastLocation.loc) <= mod.settings.loadDistance) && !mod.settings.blockedZones.includes(event.zone)) {
+        if (mod.settings.enabled && event.zone === lastZone 
+            && (mod.settings.loadExtra || event.loc.dist3D(lastLocation.loc) <= mod.settings.loadDistance || (mod.settings.blockDungeon && !mod.game.me.inDungeon))) {
             updatePos(event); //ladder fix
             mod.send('S_INSTANT_MOVE', 3, {
                 gameId: mod.game.me.gameId,
@@ -166,7 +143,7 @@ module.exports = function QuickLoad(mod) {
         lastLocation = event;
     });
 
-    mod.hook('C_VISIT_NEW_SECTION', 'raw', () => {
+    mod.hook('C_VISIT_NEW_SECTION', 'event', () => {
         // If our client doesn't send C_PLAYER_LOCATION before this packet, then it's most likely user input
         correctLocation = null;
 
